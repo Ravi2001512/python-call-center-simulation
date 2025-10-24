@@ -12,7 +12,6 @@ SIM_TIME = 8 * 60        # total simulation time = 8 hours (in minutes)
 
 # Call Process
 def call_process(env, name, agents, wait_times, service_times, queue_lengths):
-    """Each incoming call is a process."""
     arrival_time = env.now
     queue_lengths.append(len(agents.queue))
 
@@ -29,6 +28,7 @@ def call_process(env, name, agents, wait_times, service_times, queue_lengths):
 
 # Call Generator
 def call_generator(env, agents, wait_times, service_times, queue_lengths):
+    """Generate calls at random intervals."""
     call_id = 0
     while True:
         inter_arrival = random.expovariate(ARRIVAL_RATE)
@@ -54,6 +54,7 @@ def run_simulation(num_agents):
     avg_wait = statistics.mean(wait_times) if wait_times else 0
     avg_queue = statistics.mean(queue_lengths) if queue_lengths else 0
     throughput = len(service_times) / SIM_TIME
+    utilization = (sum(service_times) / (num_agents * SIM_TIME))
 
     # Display results
     print("------------------------------------------------------")
@@ -61,10 +62,12 @@ def run_simulation(num_agents):
     print(f"Average Wait (min): {avg_wait:.2f}")
     print(f"Average Queue Length: {avg_queue:.2f}")
     print(f"Throughput (calls/min): {throughput:.2f}")
+    print(f"Utilization: {utilization:.3f}")
     print(f"Total Calls Arrived: {len(service_times)}")
     print("------------------------------------------------------")
 
-# Run Simulation 
+
+# Run Simulation (No Input)
 if __name__ == "__main__":
     num_agents = 3  # set number of agents here
     run_simulation(num_agents)
