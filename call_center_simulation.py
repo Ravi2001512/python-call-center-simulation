@@ -14,21 +14,21 @@ SIM_TIME = 8 * 60        # total simulation time = 8 hours (in minutes)
 def call_process(env, name, agents, wait_times, service_times, queue_lengths):
     arrival_time = env.now
     queue_lengths.append(len(agents.queue))
-
+    
     with agents.request() as req:
         yield req  # wait until an agent is available
         wait = env.now - arrival_time
         wait_times.append(wait)
-
+        
         # Service time
         service_time = random.expovariate(1 / MEAN_SERVICE)
         service_times.append(service_time)
         yield env.timeout(service_time)
 
 
+
 # Call Generator
 def call_generator(env, agents, wait_times, service_times, queue_lengths):
-    """Generate calls at random intervals."""
     call_id = 0
     while True:
         inter_arrival = random.expovariate(ARRIVAL_RATE)
@@ -37,7 +37,8 @@ def call_generator(env, agents, wait_times, service_times, queue_lengths):
         env.process(call_process(env, f"Call-{call_id}", agents, wait_times, service_times, queue_lengths))
 
 
-# Main Simulation Function
+
+# Main Simulation
 def run_simulation(num_agents):
     random.seed(RANDOM_SEED)
     env = simpy.Environment()
@@ -56,7 +57,7 @@ def run_simulation(num_agents):
     throughput = len(service_times) / SIM_TIME
     utilization = (sum(service_times) / (num_agents * SIM_TIME))
 
-    # Display results
+    # Display results 
     print("------------------------------------------------------")
     print(f"Results for {num_agents} Agents:")
     print(f"Average Wait (min): {avg_wait:.2f}")
@@ -67,7 +68,13 @@ def run_simulation(num_agents):
     print("------------------------------------------------------")
 
 
-# Run Simulation
+
+# Get user input and run
 if __name__ == "__main__":
-    num_agents = 3  # set number of agents here
+    try:
+        num_agents = int(input("Enter number of agents: "))
+    except ValueError:
+        num_agents = 3  # default fallback
+        print("Invalid input. Using default: 3 agents.")
+
     run_simulation(num_agents)
