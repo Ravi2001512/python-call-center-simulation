@@ -2,7 +2,6 @@ import simpy
 import random
 import statistics
 
- 
 # Simulation Parameters
 RANDOM_SEED = 42
 ARRIVAL_RATE = 30 / 60   # 30 calls per hour (calls/minute)
@@ -24,17 +23,14 @@ def call_process(env, name, agents, wait_times, service_times):
         service_times.append(service_time)
         yield env.timeout(service_time)
 
-
 # Call Generator
 def call_generator(env, agents, wait_times, service_times):
-    """Generate calls at random intervals."""
     call_id = 0
     while True:
         inter_arrival = random.expovariate(ARRIVAL_RATE)
         yield env.timeout(inter_arrival)
         call_id += 1
         env.process(call_process(env, f"Call-{call_id}", agents, wait_times, service_times))
-
 
 # Main Simulation Function
 def run_simulation(num_agents):
@@ -57,8 +53,8 @@ def run_simulation(num_agents):
     print(f"Results for {num_agents} Agents:")
     print(f"Average Wait (min): {avg_wait:.2f}")
     print(f"Throughput (calls/min): {throughput:.2f}")
+    print(f"Total Calls Arrived: {len(service_times)}")
     print("------------------------------------------------------")
-
 
 # Run Simulation
 if __name__ == "__main__":
