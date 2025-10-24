@@ -60,9 +60,7 @@ def run_simulation(num_agents):
     print("------------------------------------------------------")
 
 
-# ----------------------------
-# Run Simulation (No Input)
-# ----------------------------
+# Run Simulation
 if __name__ == "__main__":
     num_agents = 3  # set number of agents here
     run_simulation(num_agents)
